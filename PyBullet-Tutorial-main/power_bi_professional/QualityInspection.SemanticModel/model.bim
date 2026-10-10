@@ -1,0 +1,262 @@
+{
+  "name": "QualityInspection",
+  "compatibilityLevel": 1600,
+  "model": {
+    "culture": "en-US",
+    "defaultPowerBIDataSourceVersion": "powerBI_V3",
+    "dataAccessOptions": {
+      "legacyRedirects": true,
+      "returnErrorValuesAsNull": true
+    },
+    "annotations": [
+      {
+        "name": "PBI_QueryOrder",
+        "value": "[\"Inspections\"]"
+      }
+    ],
+    "tables": [
+      {
+        "name": "Inspections",
+        "columns": [
+          {
+            "name": "cycle",
+            "dataType": "int64",
+            "sourceColumn": "cycle",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "image",
+            "dataType": "string",
+            "sourceColumn": "image",
+            "summarizeBy": "none",
+            "isHidden": true
+          },
+          {
+            "name": "expected_condition",
+            "dataType": "string",
+            "sourceColumn": "expected_condition",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "expected_type",
+            "dataType": "string",
+            "sourceColumn": "expected_type",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "gemini_condition",
+            "dataType": "string",
+            "sourceColumn": "gemini_condition",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "gemini_type",
+            "dataType": "string",
+            "sourceColumn": "gemini_type",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "confidence",
+            "dataType": "double",
+            "sourceColumn": "confidence",
+            "summarizeBy": "none",
+            "formatString": "0.0%"
+          },
+          {
+            "name": "type_match",
+            "dataType": "boolean",
+            "sourceColumn": "type_match",
+            "summarizeBy": "none",
+            "isHidden": true
+          },
+          {
+            "name": "destination",
+            "dataType": "string",
+            "sourceColumn": "destination",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "description",
+            "dataType": "string",
+            "sourceColumn": "description",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "camera_frame",
+            "dataType": "string",
+            "sourceColumn": "camera_frame",
+            "summarizeBy": "none",
+            "isHidden": true
+          },
+          {
+            "name": "camera_top_surface",
+            "dataType": "string",
+            "sourceColumn": "camera_top_surface",
+            "summarizeBy": "none",
+            "isHidden": true
+          },
+          {
+            "name": "capture_seconds",
+            "dataType": "double",
+            "sourceColumn": "capture_seconds",
+            "summarizeBy": "none",
+            "formatString": "0.000"
+          },
+          {
+            "name": "inspection_source",
+            "dataType": "string",
+            "sourceColumn": "inspection_source",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "record_number",
+            "dataType": "int64",
+            "sourceColumn": "record_number",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "class_match",
+            "dataType": "boolean",
+            "sourceColumn": "class_match",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "condition_match",
+            "dataType": "boolean",
+            "sourceColumn": "condition_match",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "expected_label",
+            "dataType": "string",
+            "sourceColumn": "expected_label",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "predicted_label",
+            "dataType": "string",
+            "sourceColumn": "predicted_label",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "match_label",
+            "dataType": "string",
+            "sourceColumn": "match_label",
+            "summarizeBy": "none"
+          }
+        ],
+        "measures": [
+          {
+            "name": "Total products",
+            "expression": "COUNTROWS(Inspections)",
+            "formatString": "#,0",
+            "isHidden": false
+          },
+          {
+            "name": "GOOD routed",
+            "expression": "CALCULATE([Total products], KEEPFILTERS(Inspections[destination] = \"GOOD\")) + 0",
+            "formatString": "#,0",
+            "isHidden": false
+          },
+          {
+            "name": "SCRAP routed",
+            "expression": "CALCULATE([Total products], KEEPFILTERS(Inspections[destination] = \"SCRAP\")) + 0",
+            "formatString": "#,0",
+            "isHidden": false
+          },
+          {
+            "name": "Scrap share",
+            "expression": "DIVIDE([SCRAP routed], [Total products])",
+            "formatString": "0.0%",
+            "isHidden": false
+          },
+          {
+            "name": "Exact class match",
+            "expression": "DIVIDE(CALCULATE([Total products], KEEPFILTERS(Inspections[class_match] = TRUE())) + 0, [Total products])",
+            "formatString": "0.0%",
+            "isHidden": false
+          },
+          {
+            "name": "Condition match",
+            "expression": "DIVIDE(CALCULATE([Total products], KEEPFILTERS(Inspections[condition_match] = TRUE())) + 0, [Total products])",
+            "formatString": "0.0%",
+            "isHidden": false
+          },
+          {
+            "name": "Mean confidence",
+            "expression": "AVERAGE(Inspections[confidence])",
+            "formatString": "0.0%",
+            "isHidden": false
+          },
+          {
+            "name": "Mean capture seconds",
+            "expression": "CALCULATE(AVERAGE(Inspections[capture_seconds]), KEEPFILTERS(Inspections[inspection_source] = \"Camera\"))",
+            "formatString": "0.000",
+            "isHidden": false
+          },
+          {
+            "name": "False accepts",
+            "expression": "CALCULATE([Total products], KEEPFILTERS(Inspections[expected_condition] = \"DEFECTIVE\"), KEEPFILTERS(Inspections[destination] = \"GOOD\")) + 0",
+            "formatString": "#,0",
+            "isHidden": false
+          },
+          {
+            "name": "False rejects",
+            "expression": "CALCULATE([Total products], KEEPFILTERS(Inspections[expected_condition] = \"GOOD\"), KEEPFILTERS(Inspections[destination] = \"SCRAP\")) + 0",
+            "formatString": "#,0",
+            "isHidden": false
+          },
+          {
+            "name": "Camera records",
+            "expression": "CALCULATE([Total products], KEEPFILTERS(Inspections[inspection_source] = \"Camera\")) + 0",
+            "formatString": "#,0",
+            "isHidden": false
+          },
+          {
+            "name": "Mismatched classes",
+            "expression": "CALCULATE([Total products], KEEPFILTERS(Inspections[class_match] = FALSE())) + 0",
+            "formatString": "#,0",
+            "isHidden": false
+          },
+          {
+            "name": "Class result color",
+            "expression": "SWITCH(SELECTEDVALUE(Inspections[match_label]), \"Match\", \"#16856B\", \"Mismatch\", \"#CF4C59\", \"#172B4D\")",
+            "formatString": "",
+            "isHidden": true
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Inspections",
+            "mode": "import",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = Csv.Document(File.Contents(\"C:\\Users\\KAOUTAR\\Documents\\project-20260930T081454Z-1-001\\project\\GeminiKitting\\PyBullet-Tutorial-main\\neu_defect_data\\camera_inspection_log.csv\"), [Delimiter=\",\", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),",
+                "    Headers = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
+                "    Required = Table.SelectColumns(Headers, {\"cycle\", \"image\", \"expected_condition\", \"expected_type\", \"gemini_condition\", \"gemini_type\", \"confidence\", \"type_match\", \"destination\", \"description\", \"camera_frame\", \"camera_top_surface\", \"capture_seconds\", \"inspection_source\"}),",
+                "    TextTypes = Table.TransformColumnTypes(Required, {{\"image\", type text}, {\"expected_condition\", type text}, {\"expected_type\", type text}, {\"gemini_condition\", type text}, {\"gemini_type\", type text}, {\"destination\", type text}, {\"description\", type text}, {\"camera_frame\", type text}, {\"camera_top_surface\", type text}, {\"inspection_source\", type text}}, \"en-US\"),",
+                "    Typed = Table.TransformColumns(TextTypes, {",
+                "        {\"cycle\", each Int64.From(Number.FromText(_, \"en-US\")), Int64.Type},",
+                "        {\"confidence\", each Number.FromText(_, \"en-US\"), type number},",
+                "        {\"type_match\", each Logical.FromText(Text.Lower(_)), type logical},",
+                "        {\"capture_seconds\", each if _ = null or _ = \"\" then null else Number.FromText(_, \"en-US\"), type nullable number}",
+                "    }),",
+                "    ClassMatch = Table.AddColumn(Typed, \"class_match\", each [expected_type] = [gemini_type], type logical),",
+                "    ConditionMatch = Table.AddColumn(ClassMatch, \"condition_match\", each [expected_condition] = [gemini_condition], type logical),",
+                "    Records = Table.AddIndexColumn(ConditionMatch, \"record_number\", 1, 1, Int64.Type),",
+                "    ClassLabels = [GOOD=\"Good surface\", crazing=\"Crazing\", inclusion=\"Inclusion\", patches=\"Patches\", pitted_surface=\"Pitted surface\", #\"rolled-in_scale\"=\"Rolled-in scale\", scratches=\"Scratches\"],",
+                "    ExpectedLabels = Table.AddColumn(Records, \"expected_label\", each Record.FieldOrDefault(ClassLabels, [expected_type], [expected_type]), type text),",
+                "    PredictionLabels = Table.AddColumn(ExpectedLabels, \"predicted_label\", each Record.FieldOrDefault(ClassLabels, [gemini_type], [gemini_type]), type text),",
+                "    MatchLabels = Table.AddColumn(PredictionLabels, \"match_label\", each if [class_match] then \"Match\" else \"Mismatch\", type text)",
+                "in",
+                "    MatchLabels"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

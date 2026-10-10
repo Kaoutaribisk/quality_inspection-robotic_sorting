@@ -1,0 +1,25 @@
+Total products = COUNTROWS(Inspections)
+
+GOOD routed = CALCULATE([Total products], KEEPFILTERS(Inspections[destination] = "GOOD")) + 0
+
+SCRAP routed = CALCULATE([Total products], KEEPFILTERS(Inspections[destination] = "SCRAP")) + 0
+
+Scrap share = DIVIDE([SCRAP routed], [Total products])
+
+Exact class match = DIVIDE(CALCULATE([Total products], KEEPFILTERS(Inspections[class_match] = TRUE())) + 0, [Total products])
+
+Condition match = DIVIDE(CALCULATE([Total products], KEEPFILTERS(Inspections[condition_match] = TRUE())) + 0, [Total products])
+
+Mean confidence = AVERAGE(Inspections[confidence])
+
+Mean capture seconds = CALCULATE(AVERAGE(Inspections[capture_seconds]), KEEPFILTERS(Inspections[inspection_source] = "Camera"))
+
+False accepts = CALCULATE([Total products], KEEPFILTERS(Inspections[expected_condition] = "DEFECTIVE"), KEEPFILTERS(Inspections[destination] = "GOOD")) + 0
+
+False rejects = CALCULATE([Total products], KEEPFILTERS(Inspections[expected_condition] = "GOOD"), KEEPFILTERS(Inspections[destination] = "SCRAP")) + 0
+
+Camera records = CALCULATE([Total products], KEEPFILTERS(Inspections[inspection_source] = "Camera")) + 0
+
+Mismatched classes = CALCULATE([Total products], KEEPFILTERS(Inspections[class_match] = FALSE())) + 0
+
+Class result color = SWITCH(SELECTEDVALUE(Inspections[match_label]), "Match", "#16856B", "Mismatch", "#CF4C59", "#172B4D")

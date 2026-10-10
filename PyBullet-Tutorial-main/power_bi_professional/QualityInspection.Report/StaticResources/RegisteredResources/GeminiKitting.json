@@ -1,0 +1,42 @@
+{
+  "name": "GeminiKitting",
+  "dataColors": [
+    "#2563EB",
+    "#16856B",
+    "#CF4C59",
+    "#7C6CC4",
+    "#D29B38",
+    "#548CAE"
+  ],
+  "background": "#FFFFFF",
+  "foreground": "#172B4D",
+  "foregroundNeutralSecondary": "#52657D",
+  "backgroundLight": "#DEE5EF",
+  "foregroundNeutralTertiary": "#52657D",
+  "tableAccent": "#DEE5EF",
+  "good": "#16856B",
+  "bad": "#CF4C59",
+  "neutral": "#52657D",
+  "textClasses": {
+    "label": {
+      "fontFace": "Segoe UI",
+      "fontSize": 13,
+      "color": "#172B4D"
+    },
+    "title": {
+      "fontFace": "Segoe UI",
+      "fontSize": 14,
+      "color": "#172B4D"
+    },
+    "header": {
+      "fontFace": "Segoe UI",
+      "fontSize": 14,
+      "color": "#172B4D"
+    },
+    "callout": {
+      "fontFace": "Segoe UI",
+      "fontSize": 34,
+      "color": "#172B4D"
+    }
+  }
+}
