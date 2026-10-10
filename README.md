@@ -313,4 +313,126 @@ Class and condition agreement compare predictions with the project’s dataset o
 3. Review the records and active filters.
 4. Save the report.
 
-The project may contain an original report in `power_b
+The included dashboard is located at:
+
+```text
+PyBullet-Tutorial-main/power_bi_professional/QualityInspection.pbip
+```
+
+The `.pbip` file, `QualityInspection.Report` folder, and `QualityInspection.SemanticModel` folder must remain together.
+
+The report currently references the original workstation’s CSV location. On another computer, open **Transform data → Data source settings → Change Source**, select that computer’s `camera_inspection_log.csv`, then apply the changes and refresh.
+
+Inspection logs are generated locally and are not included in this repository. Run production cycles before refreshing the dashboard. Refresh is manual, not a live connection to the simulation.
+
+## Installation and execution
+
+### Prerequisites
+
+- Python 3.11 with Tkinter support.
+- A Gemini API key with access to the model configured in the application.
+- The NEU-DET dataset, downloaded separately.
+- Power BI Desktop for the optional dashboard.
+
+Download this repository using **Code → Download ZIP**, extract it, and open the extracted repository folder in VS Code.
+
+### Install Python dependencies
+
+From the repository’s top-level folder, run these commands separately:
+
+```powershell
+py -3.11 -m venv .venv
+```
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install -r .\PyBullet-Tutorial-main\requirements.txt
+```
+
+```powershell
+.\.venv\Scripts\python.exe -m pip check
+```
+
+Virtual environments are created locally; they are not included in the repository.
+
+### Prepare the dataset
+
+Arrange the downloaded training images in this exact structure:
+
+```text
+PyBullet-Tutorial-main/
+└── neu_defect_data/
+    ├── good_reference.png
+    └── dataset/
+        └── NEU-DET/
+            └── train/
+                └── images/
+                    ├── crazing/
+                    ├── inclusion/
+                    ├── patches/
+                    ├── pitted_surface/
+                    ├── rolled-in_scale/
+                    └── scratches/
+```
+
+Each defect-class folder must contain its corresponding `.jpg` images. Dataset files are intentionally excluded from this repository. Respect the dataset provider’s usage requirements.
+
+### Configure Gemini access
+
+The application reads the API key from the `GEMINI_API_KEY` environment variable. Never put a real key in source code, documentation, or committed files.
+
+To enter the key without displaying it, run the following in the PowerShell terminal used to launch the application:
+
+```powershell
+$InspectionSecureKey = Read-Host "Enter your Gemini API key" -AsSecureString
+$env:GEMINI_API_KEY = [System.Net.NetworkCredential]::new("", $InspectionSecureKey).Password
+Remove-Variable InspectionSecureKey
+```
+
+This sets the key for the current terminal session only. API usage is subject to the provider’s access permissions, quotas, and pricing.
+
+### Run production
+
+From the repository’s top-level folder:
+
+```powershell
+cd .\PyBullet-Tutorial-main
+```
+
+```powershell
+..\.venv\Scripts\python.exe .\defect_inspection_kitting.py
+```
+
+Use the desktop controls to start production, run a single cycle, or request a stop. Allow active handling to finish before closing the application.
+
+Completed placements are saved to:
+
+```text
+neu_defect_data/camera_inspection_log.csv
+```
+
+### Run standalone scene analysis
+
+From inside `PyBullet-Tutorial-main`:
+
+```powershell
+..\.venv\Scripts\python.exe .\test_robotics_er.py
+```
+
+This demonstration analyses the included `workspace_view.png` image; it does not control the production robot.
+
+## Troubleshooting
+
+- **Missing Python module:** install dependencies using the repository’s virtual-environment interpreter.
+- **Dataset incomplete:** check the six class folders and their `.jpg` images against the structure above.
+- **Missing API key:** configure `GEMINI_API_KEY` in the terminal that launches the program.
+- **API permission or model error:** verify access to the model configured in the Python script.
+- **Blank Power BI dashboard:** generate inspection records, select the correct CSV source, and refresh.
+- **Missing simulation asset:** preserve the repository’s folder structure.
+
+## Limitations
+
+This project demonstrates simulated industrial integration. It does not establish physical robot safety, certified defect-detection accuracy, or deployment readiness.
+
+Inspection covers the photographed top surface only. Cached classifications are reused results, not fresh independent evaluations. Model confidence is not measured accuracy.
+
+External datasets, robot models, and other third-party assets retain their original licenses and attribution.
