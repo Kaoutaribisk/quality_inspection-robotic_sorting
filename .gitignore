@@ -1,0 +1,22 @@
+# Credentials
+.env
+.env.*
+!.env.example
+.kaggle/
+
+# Python environments and caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Project backups
+.project_backups/
+
+# Local datasets and generated inspection data
+neu_defect_data/*
+!neu_defect_data/good_reference.png
+
+# Power BI local caches
+.pbi/
